@@ -46,26 +46,51 @@ comp:
     ldr r0,=entrada
     ldr r1,=n
     bl scanf
+
     @Apellido
     ldr r0,=ingresoA
     bl puts
     ldr r0,=entrada
     ldr r1,=a
     bl scanf
-    /*@calculo
-    *ldr r6, =op1
-    *ldr r8,[r6]
-    *ldr r7,=op2
-    *ldr r7,[r7]
-    *add r8,r7
-    @guarda valor
-    *str r8,[r6]
-    *ldr r0,=res
-    *ldr r1,=op1
-    *ldr r1,[r1]
-    *bl printf
-    */
+
+    @Contencion de informacion
+    ldr r8,=n
+	ldr r9,=a
+
+    @Contador n
+    mov r10,#0
+
+    @Contador a
+    mov r11,#0
+
+    @Parte1
+    name:
+    ldr r1,[r8]	@valor para contar caracteres
+    add r8, #1
+	add r10,#1
+    lastName:
+    ldr r2,[r9]	@valor para contar caracteres
+	ldr r0,=formatoC
+	add r9, #1
+	add r11,#1
+
+    cmp r1, #0x00H @Error: garbage following instruction -- `cmp r1,#0x00H'
+    bne name
+    cmp r2, #0x00H
+    bne lastName
+    cmp r10,r11
+    beq suma
+
+    @Parte2
+
+    @Parte3
+    
     b Salir
+
+suma:
+ldr r5,=f
+add r5,#1
 
 /* salto para error de comando*/
 ErrorCar:
@@ -78,6 +103,8 @@ b Menu
 Salir:
 ldr r0,=adios
 bl puts
+ldr r1,=f
+bl printf
 mov r0, #0
 mov r3, #0
 ldmfd sp!, {lr}
@@ -88,6 +115,7 @@ bx lr
 n: .asciz "  "
 a: .asciz "  "
 f: .word 0
+formatoN:	.asciz "%d "
 
 menu:
     .asciz "------- Bienvenido a MiPrimerBebe.com -------\n A continuacion ingrese el posible nombre y apellido de su bebe y evaluaremos la fortuna que este tendria considerando los siguientes criterios:\n- Ambos nombre y apellido tienen la misma cantidad de letras\n- Ambos nombre y apellido tienen el mismo número de vocales\n- Ambos nombre y apellido terminan con la exacta misma letra\nEl nombre sera aprobado si su puntuacion es mayor que 2.\n\n--- COMANDOS ---\n(s) Ejecutar el programa\n(q) Salir"
@@ -105,4 +133,3 @@ error:
     .asciz "Ingreso incorrecto"
 adios:
     .asciz "Hasta pronto"
- /*"\null"*/
