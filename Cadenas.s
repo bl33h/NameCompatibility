@@ -20,12 +20,43 @@ main:
     @@ grabar registro de enlace en la pila
 stmfd sp!, {lr}
 /*impresion de menu y pide comando*/
+Menu:
+    ldr r0,=menu
+    bl puts
+    ldr r0,=opcion
+    ldr r1,=comando
+    bl scanf
 
+/*compara comandos*/
+comp:
+/*saltos dependiendo de caracter*/
+    ldr r4,=comando
+    ldrb r4,[r4]
+    cmp r4, #'s'
+    beq ejecucion
+    cmpne r4, #'q'
+    beq Salir
+    bne ErrorCar
+
+ /* ejecucion */
+    ejecucion:
+    @
+    ldr r0,=ingresoN
+    bl puts
+    ldr r0,=entrada
+    ldr r1,=n
+    bl scanf
+
+/* salto para error de comando*/
+ErrorCar:
+ldr r0,=error
+bl puts
+bl getchar
+b Menu
 
 /* si pone q sale*/
 Salir:
 ldr r0,=adios
-ldr r1,
 bl puts
 mov r0, #0
 mov r3, #0
@@ -38,10 +69,20 @@ n: .asciz ""
 a: .asciz ""
 f: .word 0
 
+menu:
+    .asciz "------- Bienvenido a MiPrimerBebe.com -------\n A continuacion ingrese el posible nombre y apellido de su bebe y evaluaremos la fortuna que este tendria considerando los siguientes criterios:\n- Ambos nombre y apellido tienen la misma cantidad de letras\n- Ambos nombre y apellido tienen el mismo número de vocales\n- Ambos nombre y apellido terminan con la exacta misma letra\nEl nombre sera aprobado si su puntuacion es mayor que 2.\n\n--- COMANDOS ---\n(s) Ejecutar el programa\n(q) Salir"
+opcion:
+    .asciz " %c"
+comando:
+    .byte 0
+entrada:
+    .asciz " %s"
 ingresoN:
-    .asciz "Ingrese su nombre: %s\n"
+    .asciz "Ingrese su nombre: \n"
 ingresoA:
-    .asciz "Ingrese su apellido: %s\n"
+    .asciz "Ingrese su apellido: \n"
+error:
+    .asciz "Ingreso incorrecto"
 adios:
-    .asciz "Su fortuna tiene un puntaje de: %d"
- 
+    .asciz "Hasta pronto"
+ /*"\null"*/
