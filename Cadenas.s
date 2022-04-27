@@ -40,12 +40,32 @@ comp:
 
  /* ejecucion */
     ejecucion:
-    @
+    @Nombre
     ldr r0,=ingresoN
     bl puts
     ldr r0,=entrada
     ldr r1,=n
     bl scanf
+    @Apellido
+    ldr r0,=ingresoA
+    bl puts
+    ldr r0,=entrada
+    ldr r1,=a
+    bl scanf
+    /*@calculo
+    *ldr r6, =op1
+    *ldr r8,[r6]
+    *ldr r7,=op2
+    *ldr r7,[r7]
+    *add r8,r7
+    @guarda valor
+    *str r8,[r6]
+    *ldr r0,=res
+    *ldr r1,=op1
+    *ldr r1,[r1]
+    *bl printf
+    */
+    b Salir
 
 /* salto para error de comando*/
 ErrorCar:
@@ -65,8 +85,8 @@ bx lr
 .data
 .align 2
 
-n: .asciz ""
-a: .asciz ""
+n: .asciz "  "
+a: .asciz "  "
 f: .word 0
 
 menu:
@@ -78,9 +98,9 @@ comando:
 entrada:
     .asciz " %s"
 ingresoN:
-    .asciz "Ingrese su nombre: \n"
+    .asciz "Ingrese su nombre: "
 ingresoA:
-    .asciz "Ingrese su apellido: \n"
+    .asciz "Ingrese su apellido: "
 error:
     .asciz "Ingreso incorrecto"
 adios:
