@@ -11,7 +11,7 @@
 * puntaje basado en 3 diferentes criterios.
  ----------------------------------------------- */
 
-/--- Inicio ---/
+/*--- Inicio ---*/
     @@ codigo de assembler: se coloca en la seccion .text
 .text
 .align 2
@@ -29,7 +29,7 @@ Menu:
     ldr r1,=comando
     bl scanf
 
-/--- Reconocimiento de comandos en el menu ---/
+/*--- Reconocimiento de comandos en el menu ---*/
 /*compara comandos*/
 comp:
 /*saltos dependiendo de caracter*/
@@ -37,11 +37,11 @@ comp:
     ldrb r4,[r4]
     cmp r4, #'s'
     beq ejecucion
-    cmpne r4, #'q'
+    cmp r4, #'q'
     beq Salir
     bne ErrorCar
 
-/--- Inputs ---/
+/*--- Inputs ---*/
  /* ejecucion */
     ejecucion:
     @Nombre
@@ -73,21 +73,132 @@ comp:
     ldr r1,[r8]	@valor para contar caracteres
     add r8, #1
 	add r10,#1
+    cmp r1, #0
+    bne name
+    ldr r0,=ingresoN
+    bl puts
+    l
+
     lastName:
     ldr r2,[r9]	@valor para contar caracteres
-	ldr r0,=formatoC
 	add r9, #1
 	add r11,#1
-
-    cmp r1, #0x00H @Error: garbage following instruction -- `cmp r1,#0x00H'
-    bne name
-    cmp r2, #0x00H
+    cmp r2, #32
     bne lastName
+
     cmp r10,r11
     beq suma
 
-    @Parte2
+    ldr r0,=formatoN
+    ldr r1,=f
+    ldr r1,[r1]
+    bl printf
 
+    @Parte2
+    @Contencion de informacion
+    ldr r8,=n
+	ldr r9,=a
+    @Contador n
+    mov r10,#0
+
+    @Contador a
+    mov r11,#0
+
+
+
+    nameP2:
+    ldr r1,[r8]	@letra para corroborar si hay vocal
+    add r8, #1
+
+    case_A:
+    cmp r1,#'A'
+    addeq r10,#1
+
+    case_E:
+    cmp r1,#'E'
+    addeq r10,#1
+
+    Case_I:
+    cmp r1,#'I'
+    addeq r10,#1
+
+    case_O:
+    cmp r1,#'O'
+    addeq r10,#1
+
+    case_U:
+    cmp r1,#'U'
+    addeq r10,#1
+
+    case_a:
+    cmp r1,#'a'
+    addeq r10,#1
+
+    case_e:
+    cmp r1,#'e'
+    addeq r10,#1
+
+    case_i:
+    cmp r1,#'i'
+    addeq r10,#1
+
+    case_o:
+    cmp r1,#'o'
+    addeq r10,#1
+
+    case_u:
+    cmp r1,#'u'
+    addeq r10,#1
+    cmp r1,#32
+    bne nameP2
+
+    lastNameP2:
+    ldr r2,[r9]	@valor para contar caracteres
+	add r9, #1
+	case_A2:
+    cmp r2,#'A'
+    addeq r11,#1
+
+    case_E2:
+    cmp r2,#'E'
+    addeq r11,#1
+
+    Case_I2:
+    cmp r2,#'I'
+    addeq r11,#1
+
+    case_O2:
+    cmp r2,#'O'
+    addeq r11,#1
+
+    case_U2:
+    cmp r2,#'U'
+    addeq r11,#1
+
+    case_a2:
+    cmp r2,#'a'
+    addeq r11,#1
+
+    case_e2:
+    cmp r2,#'e'
+    addeq r11,#1
+
+    case_i2:
+    cmp r2,#'i'
+    addeq r11,#1
+
+    case_o2:
+    cmp r2,#'o'
+    addeq r11,#1
+
+    case_u2:
+    cmp r2,#'u'
+    addeq r11,#1
+    cmp r2, #32
+    bne lastNameP2
+
+    cmp r10,r11
+    beq suma
     @Parte3
     
     b Salir
@@ -96,7 +207,7 @@ suma:
 ldr r5,=f
 add r5,#1
 
-/--- Control de errores ---/
+/*--- Control de errores ---*/
 /* salto para error de comando*/
 ErrorCar:
 ldr r0,=error
@@ -104,12 +215,13 @@ bl puts
 bl getchar
 b Menu
 
-/--- Comando de salida del menu ---/
+/*--- Comando de salida del menu ---*/
 /* si pone q sale*/
 Salir:
 ldr r0,=adios
 bl puts
-ldr r1,=f
+ldr r2,=f
+ldr r1,[r2]
 bl printf
 mov r0, #0
 mov r3, #0
@@ -119,14 +231,13 @@ bx lr
 .align 2
 
 
-/--- Variables y formato ---/
+/*--- Variables y formato ---*/
 n: .asciz "  "
 a: .asciz "  "
 f: .word 0
 formatoN:	.asciz "%d "
 
-
-/--- Instrucciones ---/
+/*--- Instrucciones ---*/
 menu:
     .asciz "------- Bienvenido a MiPrimerBebe.com -------\n A continuacion ingrese el posible nombre y apellido de su bebe y evaluaremos la fortuna que este tendria considerando los siguientes criterios:\n- Ambos nombre y apellido tienen la misma cantidad de letras\n- Ambos nombre y apellido tienen el mismo número de vocales\n- Ambos nombre y apellido terminan con la exacta misma letra\nEl nombre sera aprobado si su puntuacion es mayor que 2.\n\n--- COMANDOS ---\n(s) Ejecutar el programa\n(q) Salir"
 opcion:
