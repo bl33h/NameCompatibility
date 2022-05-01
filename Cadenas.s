@@ -10,6 +10,8 @@
 * fortuna del individuo en base a un sistema de
 * puntaje basado en 3 diferentes criterios.
  ----------------------------------------------- */
+
+/--- Inicio ---/
     @@ codigo de assembler: se coloca en la seccion .text
 .text
 .align 2
@@ -27,6 +29,7 @@ Menu:
     ldr r1,=comando
     bl scanf
 
+/--- Reconocimiento de comandos en el menu ---/
 /*compara comandos*/
 comp:
 /*saltos dependiendo de caracter*/
@@ -38,6 +41,7 @@ comp:
     beq Salir
     bne ErrorCar
 
+/--- Inputs ---/
  /* ejecucion */
     ejecucion:
     @Nombre
@@ -92,6 +96,7 @@ suma:
 ldr r5,=f
 add r5,#1
 
+/--- Control de errores ---/
 /* salto para error de comando*/
 ErrorCar:
 ldr r0,=error
@@ -99,6 +104,7 @@ bl puts
 bl getchar
 b Menu
 
+/--- Comando de salida del menu ---/
 /* si pone q sale*/
 Salir:
 ldr r0,=adios
@@ -112,11 +118,15 @@ bx lr
 .data
 .align 2
 
+
+/--- Variables y formato ---/
 n: .asciz "  "
 a: .asciz "  "
 f: .word 0
 formatoN:	.asciz "%d "
 
+
+/--- Instrucciones ---/
 menu:
     .asciz "------- Bienvenido a MiPrimerBebe.com -------\n A continuacion ingrese el posible nombre y apellido de su bebe y evaluaremos la fortuna que este tendria considerando los siguientes criterios:\n- Ambos nombre y apellido tienen la misma cantidad de letras\n- Ambos nombre y apellido tienen el mismo número de vocales\n- Ambos nombre y apellido terminan con la exacta misma letra\nEl nombre sera aprobado si su puntuacion es mayor que 2.\n\n--- COMANDOS ---\n(s) Ejecutar el programa\n(q) Salir"
 opcion:
