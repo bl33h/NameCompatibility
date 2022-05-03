@@ -73,11 +73,8 @@ comp:
     ldr r1,[r8]	@valor para contar caracteres
     add r8, #1
 	add r10,#1
-    cmp r1, #0
+    cmp r1, #32
     bne name
-    ldr r0,=ingresoN
-    bl puts
-    l
 
     lastName:
     ldr r2,[r9]	@valor para contar caracteres
@@ -103,8 +100,6 @@ comp:
 
     @Contador a
     mov r11,#0
-
-
 
     nameP2:
     ldr r1,[r8]	@letra para corroborar si hay vocal
@@ -155,6 +150,8 @@ comp:
     lastNameP2:
     ldr r2,[r9]	@valor para contar caracteres
 	add r9, #1
+
+
 	case_A2:
     cmp r2,#'A'
     addeq r11,#1
@@ -205,7 +202,10 @@ comp:
 
 suma:
 ldr r5,=f
+ldr r5,[r5]
 add r5,#1
+str r5,[r5]
+
 
 /*--- Control de errores ---*/
 /* salto para error de comando*/
@@ -237,9 +237,16 @@ a: .asciz "  "
 f: .word 0
 formatoN:	.asciz "%d "
 
+
 /*--- Instrucciones ---*/
 menu:
-    .asciz "------- Bienvenido a MiPrimerBebe.com -------\n A continuacion ingrese el posible nombre y apellido de su bebe y evaluaremos la fortuna que este tendria considerando los siguientes criterios:\n- Ambos nombre y apellido tienen la misma cantidad de letras\n- Ambos nombre y apellido tienen el mismo número de vocales\n- Ambos nombre y apellido terminan con la exacta misma letra\nEl nombre sera aprobado si su puntuacion es mayor que 2.\n\n--- COMANDOS ---\n(s) Ejecutar el programa\n(q) Salir"
+    .asciz .asciz "------- Bienvenido a MiPrimerBebe.com -------\n A continuacion 
+    ingrese el posible nombre y apellido de su bebe y evaluaremos la fortuna que este
+    tendria considerando los siguientes criterios:\n- Ambos nombre y apellido tienen 
+    la misma cantidad de letras\n- Ambos nombre y apellido tienen el mismo número de 
+    vocales\n- Ambos nombre y apellido terminan con la exacta misma letra\nEl nombre 
+    sera aprobado si su puntuacion es mayor que 2.\n\n--- COMANDOS ---\n(s) Ejecutar 
+    el programa\n(q) Salir"
 opcion:
     .asciz " %c"
 comando:
