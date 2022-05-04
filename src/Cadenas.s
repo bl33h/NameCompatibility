@@ -166,6 +166,68 @@ lastname:
 
     b ejecucion
 
+@Parte3
+ldr r4,=apellido
+ldr r5,=ca
+
+ ldr r5,[r5]
+ sub r5,#1
+ ldr r12,[r5,r4]
+ ldr r1,=ua
+ str r12,[r1]
+ add r5,#1
+
+p2a:
+ @Parte2
+ldrb r1,[r4],#1	@letra para corroborar si hay vocal
+
+    case_A2:
+    cmp r1,#'A'
+    addeq r7,#1
+
+    case_E2:
+    cmp r1,#'E'
+    addeq r7,#1
+
+    Case_I2:
+    cmp r1,#'I'
+    addeq r7,#1
+
+    case_O2:
+    cmp r1,#'O'
+    addeq r7,#1
+
+    case_U2:
+    cmp r1,#'U'
+    addeq r7,#1
+
+    case_a2:
+    cmp r1,#'a'
+    addeq r7,#1
+
+    case_e2:
+    cmp r1,#'e'
+    addeq r7,#1
+
+    case_i2:
+    cmp r1,#'i'
+    addeq r7,#1
+
+    case_o2:
+    cmp r1,#'o'
+    addeq r7,#1
+
+    case_u2:
+    cmp r1,#'u'
+    addeq r7,#1
+    
+    subs r5,#1 
+    bne p2n
+    ldr r1,=va
+    str r7,[r1]
+    mov r7,#0
+    b ejecucion
+
 control:
 @primera parte
 ldr r1,=cn
@@ -195,7 +257,7 @@ addeq r8,#1
     ldr r1,=f
     str r8,[r1]
 
-    @@ Imprimir punteo 
+    @@ Imprimir f 
     ldr r1,=f
     ldr r1,[r1]
     cmp r1,#2
@@ -241,7 +303,7 @@ texto:            .asciz    "%c"
 
 /*------------------------------------ Instrucciones ------------------------------------*/
 menu:
-    .asciz "------- Bienvenido a MiPrimerBebe.com -------\n A continuacion ingrese el posible nombre y apellido de su bebe y evaluaremos la fortuna que este tendria considerando los siguientes criterios:\n- Ambos nombre y apellido tienen la misma cantidad de letras\n- Ambos nombre y apellido tienen el mismo número de vocales\n- Ambos nombre y apellido terminan con la exacta misma letra\nEl nombre sera aprobado si su puntuacion es mayor que 2.\n\n--- COMANDOS ---\n(s) Ejecutar el programa\n(q) Salir" @@bienvenida
+    .asciz "------- Bienvenido a MiPrimerBebe.com -------\n A continuacion ingrese el posible nombre y apellido de su bebe y evaluaremos la fortuna que este tendria considerando los siguientes criterios:\n- Ambos nombre y apellido tienen la misma cantidad de letras\n- Ambos nombre y apellido tienen el mismo número de vocales\n- Ambos nombre y apellido terminan con la exacta misma letra\nEl nombre sera aprobado si su puntuacion es igual o mayor que 2.\n\n--- COMANDOS ---\n(s) Ejecutar el programa\n(q) Salir" @@bienvenida
 opcion:
     .asciz " %c"
 comando:
@@ -255,7 +317,7 @@ ingresoA:
 aprobado:
     .asciz "\nEl nombre esta aprobado\n"
 reprobado:
-    .asciz "\nEl nombre esta reprobado"
+    .asciz "\nEl nombre esta reprobado\n"
 error:
     .asciz "Ingreso incorrecto"
 adios:
