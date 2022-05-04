@@ -31,17 +31,16 @@ Menu:
     bl scanf
 
 /*------------------------------------ Comandos ------------------------------------*/
-/*--- Reconocimiento de comandos en el menu ---*/
-/*compara comandos*/
+/*Reconocimiento de comandos en el menu*/
 comp:
 /*saltos dependiendo de caracter*/
     ldr r4,=comando
     ldrb r4,[r4]
-    cmp r4, #'s'
+    cmp r4, #'s' @@comando de ejecucion
     beq ejecucion
-    cmp r4, #'q'
+    cmp r4, #'q' @@comando de salida
     beq salir
-    bne ErrorCar
+    bne ErrorCar @@error caracter incorrecto
 
 /*------------------------------------ Inputs ------------------------------------*/
  /* ejecucion */
@@ -65,8 +64,84 @@ nombre:
     ldr r4,=n
     bl scanf
 
+/*------------------------------------ Nombre -----------------------------------*/
+name:
+    @@ se detendra hasta que sea nulo
+    ldrb r1,[r4],#1
+    cmp r1,#0
+    addne r5,#1
+    bne name
+
+    ldr r1,=cn
+    str r5,[r1]
+    mov r5,#0
+
+@Parte3
+ldr r4,=nombre
+ldr r5,=cn
+
+ ldr r5,[r5]
+ sub r5,#1
+ ldr r9,[r5,r4]
+ ldr r1,=un
+ str r9,[r1]
+ add r5,#1
+
+
+
+p2n:
+ @Parte2
+ldrb r1,[r4],#1	@letra para corroborar si hay vocal
+
+    case_A:
+    cmp r1,#'A'
+    addeq r7,#1
+
+    case_E:
+    cmp r1,#'E'
+    addeq r7,#1
+
+    Case_I:
+    cmp r1,#'I'
+    addeq r7,#1
+
+    case_O:
+    cmp r1,#'O'
+    addeq r7,#1
+
+    case_U:
+    cmp r1,#'U'
+    addeq r7,#1
+
+    case_a:
+    cmp r1,#'a'
+    addeq r7,#1
+
+    case_e:
+    cmp r1,#'e'
+    addeq r7,#1
+
+    case_i:
+    cmp r1,#'i'
+    addeq r7,#1
+
+    case_o:
+    cmp r1,#'o'
+    addeq r7,#1
+
+    case_u:
+    cmp r1,#'u'
+    addeq r7,#1
+    
+    subs r5,#1 
+    bne p2n
+    ldr r1,=vn
+    str r7,[r1]
+    mov r7,#0
+    b ejecucion
+	
 apellido:
-@Apellido
+    @Apellido
     ldr r0,=ingresoA
     bl puts
     ldr r0,=entrada
@@ -74,7 +149,60 @@ apellido:
     ldr r4,=a
     bl scanf
 
+@Contencion de informacion
+    ldr r4,=a
+/*------------------------------------ Apellido ------------------------------------*/
+
+lastname:
+    @@ se detendra hasta que sea nulo
+    ldrb r1,[r4],#1
+    cmp r1,#0
+    addne r5,#1
+    bne lastname
+
+    ldr r1,=ca
+    str r5,[r1]
+    mov r5,#0
+
+    b ejecucion
+
 control:
+@primera parte
+ldr r1,=cn
+ldr r1,[r1]
+ldr r2,=ca
+ldr r2,[r2]
+cmp r1,r2
+addeq r8,#1
+
+@segunda parte
+ldr r1,=vn
+ldr r1,[r1]
+ldr r2,=va
+ldr r2,[r2]
+cmp r1,r2
+addeq r8,#1
+
+@tercera parte
+ldr r1,=un
+ldr r1,[r1]
+ldr r2,=ua
+ldr r2,[r2]
+cmp r1,r2
+addeq r8,#1
+
+@@ Guardar resultado obtenido
+    ldr r1,=f
+    str r8,[r1]
+
+    @@ Imprimir punteo 
+    ldr r1,=f
+    ldr r1,[r1]
+    cmp r1,#2
+    ldrpl r0,=aprobado
+    ldrmi r0,=reprobado
+    bl printf
+
 b salir
 
 /*------------------------------------ Control de errores ------------------------------------*/
@@ -97,19 +225,23 @@ bx lr
 .data
 .align 2
 
-/*--- Variables y formato ---*/
-n: .asciz "  "
-a: .asciz "  "
-f: .word 1
-cn: .word 0
+/*------------------------------------ Variables y formato ------------------------------------*/
+n: .asciz "  " @@nombre
+a: .asciz "  " @@apellido
+f: .word 0
+cn: .word 0 @@cantidad caracteres nombre
+vn: .word 0 @@cantidad vocales nombre
+un: .word 0 @@ultimo caracter del nombre
 ca: .word 0
+va: .word 0
+ua: .word 0
 formatoN:	.asciz "%d "
-empty:            .asciz  ""
+empty:            .asciz  " "
 texto:            .asciz    "%c"
 
 /*------------------------------------ Instrucciones ------------------------------------*/
 menu:
-    .asciz "------- Bienvenido a MiPrimerBebe.com -------\n A continuacion ingrese el posible nombre y apellido de su bebe y evaluaremos la fortuna que este tendria considerando los siguientes criterios:\n- Ambos nombre y apellido tienen la misma cantidad de letras\n- Ambos nombre y apellido tienen el mismo número de vocales\n- Ambos nombre y apellido terminan con la exacta misma letra\nEl nombre sera aprobado si su puntuacion es mayor que 2.\n\n--- COMANDOS ---\n(s) Ejecutar el programa\n(q) Salir"
+    .asciz "------- Bienvenido a MiPrimerBebe.com -------\n A continuacion ingrese el posible nombre y apellido de su bebe y evaluaremos la fortuna que este tendria considerando los siguientes criterios:\n- Ambos nombre y apellido tienen la misma cantidad de letras\n- Ambos nombre y apellido tienen el mismo número de vocales\n- Ambos nombre y apellido terminan con la exacta misma letra\nEl nombre sera aprobado si su puntuacion es mayor que 2.\n\n--- COMANDOS ---\n(s) Ejecutar el programa\n(q) Salir" @@bienvenida
 opcion:
     .asciz " %c"
 comando:
@@ -120,6 +252,10 @@ ingresoN:
     .asciz "Ingrese su nombre: "
 ingresoA:
     .asciz "Ingrese su apellido: "
+aprobado:
+    .asciz "\nEl nombre esta aprobado\n"
+reprobado:
+    .asciz "\nEl nombre esta reprobado"
 error:
     .asciz "Ingreso incorrecto"
 adios:
