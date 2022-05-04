@@ -77,6 +77,7 @@ name:
     mov r5,#0
 
 @Parte3
+@@ Termina con exactamente la misma letra
 ldr r4,=nombre
 ldr r5,=cn
 
@@ -87,10 +88,9 @@ ldr r5,=cn
  str r9,[r1]
  add r5,#1
 
-
-
 p2n:
  @Parte2
+@@ Misma cantidad de vocales
 ldrb r1,[r4],#1	@letra para corroborar si hay vocal
 
     case_A:
@@ -150,6 +150,7 @@ apellido:
     bl scanf
 
 @Contencion de informacion
+@@ Registro de almacenamiento
     ldr r4,=a
 /*------------------------------------ Apellido ------------------------------------*/
 
